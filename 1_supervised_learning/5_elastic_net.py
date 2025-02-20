@@ -1,8 +1,8 @@
 class ElasticNet():
-    def __init__(self, learning_rate=0.01, num_iterations=1000, rideg_param=0.01, lasso_param=0.01):
+    def __init__(self, learning_rate=0.01, num_iterations=1000, ridge_param=0.01, lasso_param=0.01):
         self.learning_rate = learning_rate
         self.num_iterations = num_iterations
-        self.rideg_param = rideg_param
+        self.ridge_param = ridge_param
         self.lasso_param = lasso_param
         self.weights = []
         self.bias = 0
@@ -15,7 +15,7 @@ class ElasticNet():
             prediction = sum([self.weights[j] * X[i][j] for j in range(num_features)]) + self.bias
             error = prediction - y[i]
             cost += error ** 2
-        ridge_penalty = sum([weight ** 2 for weight in self.weights]) * self.rideg_param / (2 * num_examples)
+        ridge_penalty = sum([weight ** 2 for weight in self.weights]) * self.ridge_param / (2 * num_examples)
         lasso_penalty = sum([abs(weight) for weight in self.weights]) * self.lasso_param / (2 * num_examples)
         return cost / (2 * num_examples) + ridge_penalty + lasso_penalty
 
@@ -32,9 +32,9 @@ class ElasticNet():
             dj_db += error / num_examples
         for j in range(num_features):
             if (self.weights[j] >= 0):
-                dj_dw[j] += self.rideg_param / num_examples * self.weights[j] + self.lasso_param / (2 * num_examples)  
+                dj_dw[j] += self.ridge_param / num_examples * self.weights[j] + self.lasso_param / (2 * num_examples)  
             else:
-                dj_dw[j] += self.rideg_param / num_examples * self.weights[j] - self.lasso_param / (2 * num_examples)
+                dj_dw[j] += self.ridge_param / num_examples * self.weights[j] - self.lasso_param / (2 * num_examples)
         return dj_dw, dj_db
 
     def fit(self, X, y):
