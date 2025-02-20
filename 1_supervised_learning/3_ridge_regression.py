@@ -51,29 +51,4 @@ class RidgeRegression():
             prediction = sum([self.weights[j] * X[i][j] for j in range(num_features)]) + self.bias
             predictions.append(prediction)
         return predictions
-    
-if __name__ == "__main__":
-    # Example training data
-    X_train = [
-        [1, 2],
-        [2, 3],
-        [4, 5],
-        [3, 6],
-        [5, 7]
-    ]
-    y_train = [3, 5, 9, 8, 11]
-
-    # Create and train the Ridge Regression model
-    model = RidgeRegression(learning_rate=0.01, num_iterations=1000, regularization_param=0.1)
-    model.fit(X_train, y_train)
-
-    # Example test data
-    X_test = [
-        [1, 2],
-        [2, 3],
-        [3, 4]
-    ]
-
-    # Make predictions
-    predictions = model.predict(X_test)
-    print("Predictions:", predictions)
+        
