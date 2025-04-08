@@ -57,3 +57,4 @@ class ElasticNet():
             predictions.append(prediction)
         return predictions
 
+    

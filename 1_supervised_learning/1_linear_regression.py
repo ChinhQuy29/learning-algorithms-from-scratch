@@ -46,9 +46,11 @@ class LinearRegression():
         return predictions
 
 
-X = [[1, 2], [2, 3], [3, 4], [4, 5]]
-y = [2, 3, 4, 5]
-model = LinearRegression(learning_rate=0.01, num_iterations=1000)
+X = [[1], [2], [3]]
+y = [2, 4, 6]
+model = LinearRegression(learning_rate=0.01, num_iterations=10000)
 model.fit(X, y)
-predictions = model.predict([[5, 6], [6, 7]])
-print(predictions)
+predictions = model.predict([[4], [5]])
+print(f"y = {model.weights[0]} * x + {model.bias}")
+print("Predictions:", predictions)
+
