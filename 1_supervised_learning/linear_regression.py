@@ -1,10 +1,12 @@
 class LinearRegression(): 
+    # Initializing the model
     def __init__(self, learning_rate = 0.01, num_iterations = 1000):
         self.learning_rate = learning_rate
         self.num_iterations = num_iterations
         self.weights = []
         self.bias = 0
 
+    # Mean Squared Error Cost Function
     def compute_cost(self, X, y):
         m = len(X)
         cost = 0
@@ -14,6 +16,7 @@ class LinearRegression():
             cost += error ** 2
         return cost / (2 * m)
 
+    # Gradient Descent
     def compute_gradients(self, X, y):
         dj_dw = [0] * len(X[0])
         dj_db = 0
@@ -26,6 +29,7 @@ class LinearRegression():
             dj_db += error / m
         return dj_dw, dj_db
     
+    # Training the model
     def fit(self, X, y):
         m = len(X)
         self.weights = [0] * len(X[0])
@@ -37,7 +41,7 @@ class LinearRegression():
             self.bias -= self.learning_rate * dj_db
             print(f"Iteration {i+1}/{self.num_iterations}, Cost: {cost}")
         
-    
+    # Making predictions
     def predict(self, X):
         predictions = []
         for i in range(len(X)):
