@@ -1,4 +1,5 @@
 class RidgeRegression():
+    # Initializing the model
     def __init__(self, learning_rate=0.01, num_iterations=1000, regularization_param=0.01):
         self.learning_rate = learning_rate 
         self.num_iterations = num_iterations
@@ -6,6 +7,7 @@ class RidgeRegression():
         self.weights = []
         self.bias = 0
 
+    # Mean Squared Error Cost Function with L2 Regularization
     def compute_cost(self, X, y):
         num_examples = len(X)
         num_features = len(X[0])
@@ -17,6 +19,7 @@ class RidgeRegression():
         ridge_penalty = sum([self.weights[j] ** 2 * self.regularization_param for j in range(num_features)])
         return (cost + ridge_penalty) / (2 * num_examples)
 
+    # Gradient Descent
     def compute_gradients(self, X, y):
         num_examples = len(X)
         num_features = len(X[0])
@@ -32,6 +35,7 @@ class RidgeRegression():
             dj_dw[j] += self.regularization_param / num_examples * self.weights[j]
         return dj_dw, dj_db
         
+    # Training the model
     def fit(self, X, y):
         num_features = len(X[0])
         self.weights = [0] * num_features
@@ -41,8 +45,10 @@ class RidgeRegression():
                 self.weights[j] -= self.learning_rate * dj_dw[j]
             self.bias -= self.learning_rate * dj_db
             cost = self.compute_cost(X, y)
-            print(f"Iteration {i+1}/{self.num_iterations}, Cost: {cost}")
+            if i % 100 == 0:
+                print(f"Iteration {i+1}/{self.num_iterations}, Cost: {cost}")
 
+    # Making predictions
     def predict(self, X):
         num_examples = len(X)
         num_features = len(X[0])
@@ -52,3 +58,16 @@ class RidgeRegression():
             predictions.append(prediction)
         return predictions
         
+# Example usage:
+if __name__ == "__main__":
+    # Sample dataset
+    X = [[1], [2], [3], [4], [5], [6]]
+    y = [2, 4, 6, 8, 10, 12]
+
+    # Initialize and train model
+    model = RidgeRegression(learning_rate=0.01, num_iterations=1000, regularization_param=0.1)
+    model.fit(X, y)
+
+    # Make predictions
+    predictions = model.predict([[7]])
+    print(f"Predictions for input [[7]]: {predictions}")
