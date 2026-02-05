@@ -2,6 +2,7 @@ import numpy as np
 from decision_tree import DecisionTree
 
 class RandomForest:
+    # Initializing the model
     def __init__(self, n_trees=100, max_depth=None, min_samples_split=2, 
                  max_features='sqrt', bootstrap=True, criterion='gini'):
         self.n_trees = n_trees
@@ -11,12 +12,14 @@ class RandomForest:
         self.bootstrap = bootstrap
         self.criterion = criterion
         self.trees = []
-        
+
+    # Creating a bootstrap sample   
     def _bootstrap_sample(self, X, y):
         n_samples = X.shape[0]
         indices = np.random.choice(n_samples, size=n_samples, replace=True)
         return X[indices], y[indices]
     
+    # Determining the number of features to consider at each split
     def _get_max_features(self, n_features):
         if isinstance(self.max_features, int):
             return min(self.max_features, n_features)
@@ -29,6 +32,7 @@ class RandomForest:
         else:
             return n_features  # default: use all features
     
+    # Training the model
     def fit(self, X, y):
         self.trees = []
         n_features = X.shape[1]
@@ -55,6 +59,7 @@ class RandomForest:
             
         return self
     
+    # Making predictions
     def predict(self, X):
         predictions = np.zeros((X.shape[0], len(self.trees)))
         
@@ -69,10 +74,12 @@ class RandomForest:
             
         return final_predictions
     
+    # Calculating accuracy
     def score(self, X, y):
         predictions = self.predict(X)
         return np.mean(predictions == y)
     
+    # Estimating feature importance
     def feature_importance(self, X, y):
         base_score = self.score(X, y)
         n_features = X.shape[1]
@@ -85,3 +92,31 @@ class RandomForest:
             importances[feature_idx] = base_score - permuted_score
             
         return importances
+
+# Example usage:
+if __name__ == "__main__":
+    from sklearn.datasets import load_iris
+    from sklearn.model_selection import train_test_split
+
+    # Load dataset
+    data = load_iris()
+    X = data.data
+    y = data.target
+
+    # Split dataset
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Initialize and train model
+    model = RandomForest(n_trees=10, max_depth=5, min_samples_split=2, max_features='sqrt', bootstrap=True)
+    model.fit(X_train, y_train)
+
+    # Make predictions
+    predictions = model.predict(X_test)
+
+    # Calculate accuracy
+    accuracy = model.score(X_test, y_test)
+    print(f"Accuracy: {accuracy}")
+
+    # Feature importance
+    importances = model.feature_importance(X_test, y_test)
+    print(f"Feature Importances: {importances}")
